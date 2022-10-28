@@ -1,7 +1,7 @@
-import { Component } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { ThreeCircles } from 'react-loader-spinner';
 import { ToastContainer } from 'react-toastify';
+import { useEffect, useState } from "react";
 
 
 import Button from './Button/Button'
@@ -10,46 +10,44 @@ import SearchBar from './Searchbare/Serchbar'
 import ImageGallery from './ImageGallery/ImageGallery'
 
 
+export const App = () => {
+  const [page, setPage] = useState(1);
+  const [input, setInput] = useState('');
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
+   useEffect(() => {
+    setLoading( true );
 
-export class App extends Component {
-  state = {
-    page: 1,
-    input: '',
-    date: [],
-    loading: false,
-  };
+    FetchImages(page, input)
+      .then(imgArr => {
+        setData(imgArr.hits);
+        setLoading(false)
+      })
+      .catch(error => { console.log(error); setLoading( false ) })
+       
+  }, [input])
 
-  componentDidUpdate(_, prevState) {
-    const { input, page } = this.state;
-
-    if (prevState.input !== input || page !== prevState.page) {
-      this.setState({ loading: true });
+  useEffect(() => {
+    setLoading( true );
 
       FetchImages(page, input)
         .then(imgArr => {
-          if (input !== prevState.input) this.setState({ data: imgArr.hits, loading: false });
-          else
-            this.setState(prevState => {
-              return {
-                data: [...prevState.data, ...imgArr.hits], loading: false,
-              };
-            });
-        })
-        .catch(error => { console.log(error); this.setState({ loading: false }) })
+         
+          setData(prevData => [...prevData, ...imgArr.hits]);
+          setLoading(false)
+            })
+          .catch(error => { console.log(error); setLoading( false ) })
        
-      return;
-    }
+     }, [page])
+  
+  const onSubmit = (input, page) => {
+    setInput(input),
+    setPage(page: 1),  
   }
   
-  onSubmit = input => {
-    this.setState({
-      input,
-      page: 1,  
-  })
-  }
   
-  onClick = e => {
+  const onClick = e => {
     if (e) {
       this.setState(prevState => {
         return {
@@ -60,8 +58,8 @@ export class App extends Component {
   }
 
 
-  render() {
-    const { data, loading, input } = this.state;
+  
+    
   return (
     <>
       <SearchBar onSub={this.onSubmit} />
@@ -85,4 +83,4 @@ export class App extends Component {
     </>
     );
     }
-};
+
