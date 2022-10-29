@@ -1,19 +1,19 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
 
-export default class Button extends Component {
+
+export const Button =({handleClick})=> {
  
-  onClickEvent = e => {
-    this.props.handleClick(e);
+ const onClickEvent = e => {
+    handleClick(e);
   };
 
-  render() {
+  
     return (
-      <div type="button" className="Button" onClick={this.onClickEvent}>
+      <div type="button" className="Button" onClick={onClickEvent}>
         Load more
       </div>
     );
-  }
+  
 }
 Button.propTypes = {
     handleClick: PropTypes.func.isRequired,

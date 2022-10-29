@@ -1,11 +1,8 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
+import {ImageGalleryItem} from '../ImageGalleryItem/ImageGalleryItem';
 
-export default class ImageGallery extends Component {  
+export const ImageGallery = ({ inputData }) => {  
 
-   render() {
-    const { inputData } = this.props;
 
     return (
       <>
@@ -14,7 +11,7 @@ export default class ImageGallery extends Component {
         </ul>
       </>
     );
-  }
+  
 }
 
 ImageGallery.propTypes = {

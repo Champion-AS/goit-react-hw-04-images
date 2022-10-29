@@ -4,10 +4,10 @@ import { ToastContainer } from 'react-toastify';
 import { useEffect, useState } from "react";
 
 
-import Button from './Button/Button'
+import {Button} from './Button/Button'
 import FetchImages from './GalleryApi/GalleryApy'
-import SearchBar from './Searchbare/Serchbar'
-import ImageGallery from './ImageGallery/ImageGallery'
+import {SearchBar} from './Searchbare/Serchbar'
+import {ImageGallery} from './ImageGallery/ImageGallery'
 
 
 export const App = () => {
@@ -16,44 +16,55 @@ export const App = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-   useEffect(() => {
-    setLoading( true );
-
-    FetchImages(page, input)
-      .then(imgArr => {
-        setData(imgArr.hits);
-        setLoading(false)
-      })
-      .catch(error => { console.log(error); setLoading( false ) })
-       
-  }, [input])
-
   useEffect(() => {
-    setLoading( true );
+    if (input) {
+      setLoading(true);
 
       FetchImages(page, input)
         .then(imgArr => {
-         
-          setData(prevData => [...prevData, ...imgArr.hits]);
-          setLoading(false)
-            })
-          .catch(error => { console.log(error); setLoading( false ) })
+          if (page > 1) setData(prevData => [...prevData, ...imgArr.hits]);
+          else setData(imgArr.hits);
+        })
+        .catch(error => console.log(error))
+        .finally(setLoading(false));
+      return;
+    }
+  }, [input, page]);
+
+  //  useEffect(() => {
+  //   setLoading( true );
+
+  //   FetchImages(page, input)
+  //     .then(imgArr => {
+  //       setData(imgArr.hits);
+  //       setLoading(false)
+  //     })
+  //     .catch(error => { console.log(error); setLoading( false ) })
        
-     }, [page])
+  // }, [input])
+
+  // useEffect(() => {
+  //   setLoading( true );
+
+  //     FetchImages(page, input)
+  //       .then(imgArr => {
+         
+  //         setData(prevData => [...prevData, ...imgArr.hits]);
+  //         setLoading(false)
+  //           })
+  //         .catch(error => { console.log(error); setLoading( false ) })
+       
+  //    }, [page])
   
-  const onSubmit = (input, page) => {
-    setInput(input),
-    setPage(page: 1),  
-  }
+  const onSubmit = (input) => {
+    setInput(input);
+    setPage(1);  
+  };
   
   
   const onClick = e => {
     if (e) {
-      this.setState(prevState => {
-        return {
-          page: prevState.page + 1,
-        }
-      })
+      setPage(prevPage => prevPage + 1)
     }
   }
 
@@ -62,7 +73,7 @@ export const App = () => {
     
   return (
     <>
-      <SearchBar onSub={this.onSubmit} />
+      <SearchBar onSub={onSubmit} />
       {loading && (
           <ThreeCircles
             height="100"
@@ -78,7 +89,7 @@ export const App = () => {
           />
        )} 
       {data && <ImageGallery inputData={data} />}      
-      {input && !loading && <Button handleClick={this.onClick} />}
+      {input && !loading && <Button handleClick={onClick} />}
     <ToastContainer/>
     </>
     );

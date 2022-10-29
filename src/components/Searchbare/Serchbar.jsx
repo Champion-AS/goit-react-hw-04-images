@@ -1,19 +1,17 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
-import  SearchForm from '../SearchForm/SearchForm';
+import  {SearchForm} from '../SearchForm/SearchForm';
 
-export class SearchBar extends Component {
-    render() {
+export const SearchBar =({onSub})=> {
+    
     return (
       <header className="header">
-        <SearchForm onSub={this.props.onSub} />
+        <SearchForm onSub={onSub} />
       </header>
     );
-  }
+  
 }
 
 SearchBar.propTypes = {
     onSub: PropTypes.func.isRequired,
 }
 
-export default SearchBar;

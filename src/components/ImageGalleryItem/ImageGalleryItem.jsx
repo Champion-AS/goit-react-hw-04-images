@@ -1,31 +1,25 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 
-import Modal  from '../Modal/Modal';
+import {Modal}  from '../Modal/Modal';
 
-export default class ImageGalleryItem extends Component {
-      
-    state = {
-    modalImage: null,
-  };
-
-  handleClick = img => {
-    if (!this.state.modalImage) {
+export const ImageGalleryItem =({inputData}) => {
+      const [modalImage, setModalImage] = useState('')
+ 
+  const handleClick = img => {
+    if (!modalImage) {
       const { largeImageURL, tags } = img;
-      this.setState({ modalImage: { tags, largeImageURL } });
+      setModalImage( {tags, largeImageURL} );
       return;
     }
 
-    this.setState({ modalImage: null });
+    setModalImage( null );
     return;
     };
     
-
-      render() {
-    const { modalImage } = this.state;
-    const { inputData } = this.props;
-          return (
+  
+      return (
        
       <>
         {inputData.map(img => (
@@ -34,7 +28,7 @@ export default class ImageGalleryItem extends Component {
               className="ImageGalleryItem-image"
               src={img.webformatURL}
               alt={img.tags}
-              onClick={() => this.handleClick(img)}
+              onClick={() => handleClick(img)}
             />
           </li>
         ))}
@@ -42,12 +36,12 @@ export default class ImageGalleryItem extends Component {
           <Modal
             img={modalImage.largeImageURL}
             alt={modalImage.tags}
-            onClose={this.handleClick}
+            onClose={handleClick}
           />
         )}
       </>
     )
-  }
+  
 }
 
 ImageGalleryItem.propTypes = {

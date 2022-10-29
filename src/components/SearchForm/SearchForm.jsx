@@ -1,22 +1,17 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export class SearchForm extends Component { 
-    state = {
-        input: '',
-    }
-
-    handleInput = e => {
-    this.setState({
-            input: e.target.value,
-        });
+export const SearchForm = ({onSub}) => { 
+    const [input, setInput] = useState('')
+    
+    const handleInput = e => {
+    setInput(e.target.value);
     }
     
-    handleSubmit = e => {
+    const handleSubmit = e => {
         e.preventDefault();
-        const { input } = this.state;
-
+        
         if (input.trim() === '') {
             return toast.warn('Enter search name!', {
                 position: 'top-right',
@@ -29,14 +24,12 @@ export class SearchForm extends Component {
             });
         }
 
-        this.props.onSub(input);
+        onSub(input);
     };
 
 
-    render() {
-        const { input } = this.state;
         return (
-            <form className="SearchForm" onSubmit={this.handleSubmit}>
+            <form className="SearchForm" onSubmit={handleSubmit}>
         <button type="submit" className="SearchForm-button">
           <span className="SearchForm-button-label">Search</span>
         </button>
@@ -48,16 +41,14 @@ export class SearchForm extends Component {
           autoFocus
           placeholder="Search images and photos"
           value={input}
-          onChange={this.handleInput}
+          onChange={handleInput}
         />
       </form>
         )
-    }
 }
+
 
 SearchForm.propTypes = {
     input: PropTypes.string,
     onSub: PropTypes.func.isRequired,
 }
-
-export default SearchForm;
